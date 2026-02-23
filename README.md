@@ -41,5 +41,5 @@ npm run start
 В репо добавлен workflow: `.github/workflows/deploy-pages.yml`.
 
 - На `push` в `main` выполняется статический экспорт в `dist/pages`.
-- Домен зафиксирован: `helper.rigby-foundation.org` (файл `CNAME`).
+- Домен зафиксирован: `betterhelperjs.rigby-foundation.org` (файл `CNAME`).
 - Base path всегда `/` (режим custom domain only).

@@ -1,0 +1,25 @@
+{
+  "name": "better-helper-docs",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build",
+    "build:server": "vite build --ssr src/app.tsx --outDir dist/server",
+    "start": "NODE_ENV=production tsx server.ts",
+    "check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "better-helperjs": "file:../BetterHelperjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.12",
+    "@types/node": "^24.3.0",
+    "tailwindcss": "^4.1.12",
+    "tsx": "^4.20.5",
+    "typescript": "^5.7.3",
+    "vite": "^7.3.1"
+  }
+}

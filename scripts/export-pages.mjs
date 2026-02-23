@@ -42,8 +42,14 @@ function createRootLanguageRedirect(basePath) {
 function rewriteAbsoluteUrls(html, basePath) {
   if (basePath === '/') return html;
 
-  return html.replace(/\b(href|src)=("|')\/(?!\/)/g, (_full, attribute, quote) => {
-    return `${attribute}=${quote}${basePath}`;
+  const baseWithoutLeadingSlash = basePath.replace(/^\/+/, '');
+
+  return html.replace(/\b(href|src)=("|')\/(?!\/)([^"']+)/g, (_full, attribute, quote, urlPath) => {
+    if (urlPath.startsWith(baseWithoutLeadingSlash)) {
+      return `${attribute}=${quote}/${urlPath}`;
+    }
+
+    return `${attribute}=${quote}${basePath}${urlPath}`;
   });
 }
 
@@ -84,7 +90,7 @@ async function main() {
   }
 
   const styleTags = (entry.css ?? [])
-    .map((cssFile) => `<link rel="stylesheet" href="${withBase(basePath, `/${cssFile}`)}">`)
+    .map((cssFile) => `<link rel="stylesheet" href="/${cssFile}">`)
     .join('');
 
   const routes = new Set(['/', '/404', '/en', '/ru', '/en/about', '/ru/about', '/en/docs', '/ru/docs']);
@@ -126,4 +132,3 @@ main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
-

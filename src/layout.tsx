@@ -14,6 +14,9 @@ function switchLanguagePath(currentUrl: string, target: Language): string {
   const currentLang = resolveLanguage(parts[0]);
 
   if (!currentLang) {
+    if (pathPart === '/404') {
+      return `/${target}`;
+    }
     const normalizedPath = pathPart === '/' ? '' : pathPart;
     return `/${target}${normalizedPath}${queryPart ? `?${queryPart}` : ''}`;
   }

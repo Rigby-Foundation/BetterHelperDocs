@@ -43,6 +43,9 @@ jobs:
             echo "path=/$REPO/" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Workaround npm optional deps bug
+        run: rm -rf node_modules package-lock.json
+
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 

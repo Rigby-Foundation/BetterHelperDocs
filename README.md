@@ -18,6 +18,7 @@ npm install
 npm run dev
 npm run check
 npm run build
+npm run build:pages
 npm run start
 ```
 
@@ -34,3 +35,11 @@ npm run start
 - `Fundamentals`: introduction, installation, project structure
 - `Guides`: routing, data loading, JSX runtime, SSR/hydration, error handling
 - `Reference`: CLI, API reference
+
+## GitHub Pages
+
+В репо добавлен workflow: `.github/workflows/deploy-pages.yml`.
+
+- На `push` в `main` выполняется статический экспорт в `dist/pages`.
+- Для project pages автоматически выставляется base path `/<repo>/`.
+- Для `<owner>.github.io` base path будет `/`.

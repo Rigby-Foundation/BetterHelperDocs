@@ -8,6 +8,7 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "vite build --ssr src/app.tsx --outDir dist/server",
+    "build:pages": "npm run build && node scripts/export-pages.mjs",
     "start": "NODE_ENV=production tsx server.ts",
     "check": "tsc -p tsconfig.json --noEmit"
   },

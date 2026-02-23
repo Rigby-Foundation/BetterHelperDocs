@@ -70,6 +70,7 @@ async function main() {
   const root = process.cwd();
   const distClient = path.resolve(root, 'dist/client');
   const distPages = path.resolve(root, 'dist/pages');
+  const cnamePath = path.resolve(root, 'CNAME');
   const templatePath = path.resolve(root, 'index.html');
   const manifestPath = path.resolve(distClient, '.vite/manifest.json');
   const assetsFrom = path.resolve(distClient, 'assets');
@@ -105,6 +106,13 @@ async function main() {
   await mkdir(distPages, { recursive: true });
   await cp(assetsFrom, assetsTo, { recursive: true });
   await writeFile(path.join(distPages, '.nojekyll'), '', 'utf8');
+  try {
+    await cp(cnamePath, path.join(distPages, 'CNAME'));
+  } catch (error) {
+    if (!error || error.code !== 'ENOENT') {
+      throw error;
+    }
+  }
 
   for (const route of routes) {
     const rendered = await site.render(route);

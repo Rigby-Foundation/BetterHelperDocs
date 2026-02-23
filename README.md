@@ -41,5 +41,5 @@ npm run start
 В репо добавлен workflow: `.github/workflows/deploy-pages.yml`.
 
 - На `push` в `main` выполняется статический экспорт в `dist/pages`.
-- Для project pages автоматически выставляется base path `/<repo>/`.
-- Для `<owner>.github.io` base path будет `/`.
+- Домен зафиксирован: `helper.rigby-foundation.org` (файл `CNAME`).
+- Base path всегда `/` (режим custom domain only).

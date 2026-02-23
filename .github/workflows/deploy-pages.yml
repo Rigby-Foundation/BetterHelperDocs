@@ -31,18 +31,6 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Resolve base path
-        id: base
-        shell: bash
-        run: |
-          REPO="${{ github.event.repository.name }}"
-          OWNER="${{ github.repository_owner }}"
-          if [[ "$REPO" == "${OWNER}.github.io" ]]; then
-            echo "path=/" >> "$GITHUB_OUTPUT"
-          else
-            echo "path=/$REPO/" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Workaround npm optional deps bug
         run: rm -rf node_modules package-lock.json
 
@@ -51,7 +39,7 @@ jobs:
 
       - name: Build static pages
         env:
-          PAGES_BASE_PATH: ${{ steps.base.outputs.path }}
+          PAGES_BASE_PATH: /
         run: npm run build:pages
 
       - name: Upload Pages artifact

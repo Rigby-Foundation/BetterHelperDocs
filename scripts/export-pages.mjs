@@ -66,6 +66,16 @@ function collectDocSlugs(language, html) {
   return Array.from(slugs);
 }
 
+async function fileExists(filePath) {
+  try {
+    await readFile(filePath, 'utf8');
+    return true;
+  } catch (error) {
+    if (error && error.code === 'ENOENT') return false;
+    throw error;
+  }
+}
+
 async function main() {
   const root = process.cwd();
   const distClient = path.resolve(root, 'dist/client');
@@ -75,7 +85,8 @@ async function main() {
   const manifestPath = path.resolve(distClient, '.vite/manifest.json');
   const assetsFrom = path.resolve(distClient, 'assets');
   const assetsTo = path.resolve(distPages, 'assets');
-  const basePath = normalizeBasePath(process.env.PAGES_BASE_PATH);
+  const hasCname = await fileExists(cnamePath);
+  const basePath = hasCname ? '/' : normalizeBasePath(process.env.PAGES_BASE_PATH);
 
   const [template, manifestRaw, docsEn, docsRu] = await Promise.all([
     readFile(templatePath, 'utf8'),
@@ -134,6 +145,9 @@ async function main() {
 
   console.log(`[pages] exported ${routes.size} routes to ${distPages}`);
   console.log(`[pages] base path: ${basePath}`);
+  if (hasCname) {
+    console.log('[pages] custom domain detected via CNAME, forced base path to /');
+  }
 }
 
 main().catch((error) => {

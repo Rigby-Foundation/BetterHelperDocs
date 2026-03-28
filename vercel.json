@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.ts": {
-      "includeFiles": "{dist/**,dist/**/.*,dist/**/.*/**,dist/client/.vite/manifest.json,dist/server/.vite/manifest.json,index.html}"
+      "includeFiles": "{dist/**,dist/**/.*,dist/**/.*/**,dist/client/.vite/manifest.json,dist/server/.vite/manifest.json,index.html,node_modules/better-helperjs/**}"
     }
   },
   "rewrites": [

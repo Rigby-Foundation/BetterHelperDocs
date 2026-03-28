@@ -28,10 +28,11 @@ function switchLanguagePath(currentUrl: string, target: Language): string {
 export default function Layout({ state, children, title, status }: CounterSiteLayoutProps) {
   const language = languageFromUrl(state.url);
   const ui = getDictionary(language);
-  const otherLanguage: Language = language === 'en' ? 'ru' : 'en';
-  const otherLanguagePath = switchLanguagePath(state.url, otherLanguage);
 
   const isLandingPage = title === 'Overview' || title === 'Language';
+
+  const enPath = switchLanguagePath(state.url, 'en');
+  const ruPath = switchLanguagePath(state.url, 'ru');
 
   return (
     <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] relative overflow-x-hidden">
@@ -39,12 +40,12 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
       <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-[hsl(var(--primary-glow))] bg-glow rounded-full"></div>
 
       <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] glass-panel">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4 relative z-10">
+        <div className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between gap-4 px-6 py-4 relative z-10">
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-8 items-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-3 text-sm font-semibold text-[hsl(var(--foreground))] shadow-sm">
+            <Link href={`/${language}`} className="inline-flex h-8 items-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-3 text-sm font-semibold text-[hsl(var(--foreground))] shadow-sm hover:bg-[hsl(var(--border))] transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="mr-2 text-[hsl(var(--primary))]"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-              {ui.siteLabel}
-            </span>
+              BetterHelper
+            </Link>
             {status !== 200 && (
               <span className="rounded-md border border-[hsl(var(--border))] px-2 py-1 text-xs text-[hsl(var(--muted-foreground))] bg-[hsl(var(--card))]">
                 HTTP {status}
@@ -59,9 +60,16 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
             <Link href={`/${language}/about`} className="nav-link">{ui.navAbout}</Link>
           </nav>
 
-          <Link href={otherLanguagePath} className="btn-outline text-xs">
-            {ui.switchTo} {otherLanguage.toUpperCase()}
-          </Link>
+          <select
+            className="h-8 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-2 text-xs text-[hsl(var(--foreground))] cursor-pointer hover:bg-[hsl(var(--border))] transition-colors focus:outline-none"
+            onChange={(e: Event) => {
+              const target = e.target as HTMLSelectElement;
+              window.location.href = target.value;
+            }}
+          >
+            <option value={enPath} selected={language === 'en'}>🇺🇸 English</option>
+            <option value={ruPath} selected={language === 'ru'}>🇷🇺 Русский</option>
+          </select>
         </div>
       </header>
 
@@ -69,7 +77,7 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
         {isLandingPage ? (
           children
         ) : (
-          <div className="mx-auto grid w-full max-w-5xl gap-6 px-6 py-10">
+          <div className="w-full px-6 py-10">
             <section className="card p-8 bg-[hsl(var(--background))]">
               <div className="mb-8 border-b border-[hsl(var(--border))] pb-5">
                 <h1 className="text-3xl font-bold tracking-tight text-[hsl(var(--foreground))]">{title}</h1>

@@ -1,6 +1,6 @@
 import { Link } from 'better-helperjs/router';
 import { useEffect } from 'better-helperjs/jsx';
-import { detectSystemLanguage } from '../content/docs.js';
+import { detectSystemLanguage } from '../content/i18n.js';
 
 export const meta = {
   title: 'Language',

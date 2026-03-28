@@ -60,16 +60,44 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
             <Link href={`/${language}/about`} className="nav-link">{ui.navAbout}</Link>
           </nav>
 
-          <select
-            className="h-8 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-2 text-xs text-[hsl(var(--foreground))] cursor-pointer hover:bg-[hsl(var(--border))] transition-colors focus:outline-none"
-            onChange={(e: Event) => {
-              const target = e.target as HTMLSelectElement;
-              window.location.href = target.value;
+          <div
+            className="custom-select"
+            onClick={(e: MouseEvent) => {
+              const el = (e.currentTarget as HTMLElement);
+              el.classList.toggle('open');
+              // close on outside click
+              const close = (ev: MouseEvent) => {
+                if (!el.contains(ev.target as Node)) {
+                  el.classList.remove('open');
+                  document.removeEventListener('click', close, true);
+                }
+              };
+              if (el.classList.contains('open')) {
+                document.addEventListener('click', close, true);
+              }
             }}
           >
-            <option value={enPath} selected={language === 'en'}>🇺🇸 English</option>
-            <option value={ruPath} selected={language === 'ru'}>🇷🇺 Русский</option>
-          </select>
+            <button type="button" className="custom-select-trigger">
+              <span>{language === 'en' ? '🇺🇸 English' : '🇷🇺 Русский'}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div className="custom-select-content">
+              <a
+                href={enPath}
+                className={`custom-select-item ${language === 'en' ? 'active' : ''}`}
+              >
+                🇺🇸 English
+                <svg className="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </a>
+              <a
+                href={ruPath}
+                className={`custom-select-item ${language === 'ru' ? 'active' : ''}`}
+              >
+                🇷🇺 Русский
+                <svg className="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </header>
 

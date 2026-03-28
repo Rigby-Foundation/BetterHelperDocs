@@ -7,7 +7,9 @@
       "config": {
         "includeFiles": [
           "index.html",
-          "dist/**/*"
+          "dist/**/*",
+          "dist/**/.*",
+          "dist/**/.*/**"
         ]
       }
     }

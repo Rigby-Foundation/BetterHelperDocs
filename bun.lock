@@ -4,7 +4,7 @@
     "": {
       "name": "better-helper-docs",
       "dependencies": {
-        "better-helperjs": "^3.0.2",
+        "better-helperjs": "^3.0.5",
       },
       "devDependencies": {
         "@tailwindcss/vite": "^4.1.12",
@@ -43,7 +43,7 @@
 
     "@types/node": ["@types/node@24.10.13", "", { "dependencies": { "undici-types": "~7.16.0" } }, ""],
 
-    "better-helperjs": ["better-helperjs@3.0.3", "", { "peerDependencies": { "vite": "^7.3.1" }, "bin": "dist/cli.js" }, ""],
+    "better-helperjs": ["better-helperjs@3.0.5", "", { "peerDependencies": { "vite": "^7.3.1" }, "optionalPeers": ["vite"], "bin": { "better-helperjs": "dist/cli.js" } }, "sha512-CuEyr0tPI7/iJXSv1mnmKlCHRsjevqn7Y+ijzzjERvbHcVxV5HvBjmwukehLPgi4C/w8dnO1wsh88PdscZNJJg=="],
 
     "detect-libc": ["detect-libc@2.1.2", "", {}, ""],
 

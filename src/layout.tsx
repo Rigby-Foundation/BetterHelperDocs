@@ -43,7 +43,7 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
         <div className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between gap-4 px-6 py-4 relative z-10">
           <div className="flex items-center gap-3">
             <Link href={`/${language}`} className="inline-flex h-8 items-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-3 text-sm font-semibold text-[hsl(var(--foreground))] shadow-sm hover:bg-[hsl(var(--border))] transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="mr-2 text-[hsl(var(--primary))]"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-[hsl(var(--primary))]"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
               BetterHelper
             </Link>
             {status !== 200 && (
@@ -79,7 +79,7 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
           >
             <button type="button" className="custom-select-trigger">
               <span>{language === 'en' ? '🇺🇸 English' : '🇷🇺 Русский'}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <div className="custom-select-content">
               <a
@@ -87,14 +87,14 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
                 className={`custom-select-item ${language === 'en' ? 'active' : ''}`}
               >
                 🇺🇸 English
-                <svg className="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                <svg className="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
               </a>
               <a
                 href={ruPath}
                 className={`custom-select-item ${language === 'ru' ? 'active' : ''}`}
               >
                 🇷🇺 Русский
-                <svg className="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                <svg className="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
               </a>
             </div>
           </div>

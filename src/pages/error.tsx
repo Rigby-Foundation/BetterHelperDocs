@@ -1,5 +1,5 @@
 import type { CounterSiteErrorContext } from 'better-helperjs/ssr';
-import { getUiDictionary, resolveLanguage } from '../content/docs.js';
+import { getDictionary, resolveLanguage } from '../content/i18n.js';
 
 export const meta = {
   title: 'Error',
@@ -7,7 +7,7 @@ export const meta = {
 
 export default function ErrorPage(ctx: CounterSiteErrorContext) {
   const language = resolveLanguage(ctx.pathname.split('/').filter(Boolean)[0]) ?? 'en';
-  const ui = getUiDictionary(language);
+  const ui = getDictionary(language);
   const message = ctx.error instanceof Error ? ctx.error.message : String(ctx.error);
 
   return (

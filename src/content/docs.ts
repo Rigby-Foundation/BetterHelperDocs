@@ -1,35 +1,6 @@
-export type Language = 'en' | 'ru';
-export type DocCategoryId = 'fundamentals' | 'guides' | 'reference';
+import type { Language } from './i18n.js';
 
-export interface UiDictionary {
-  siteLabel: string;
-  docsLabel: string;
-  getStartedLabel: string;
-  navOverview: string;
-  navAbout: string;
-  navDocsHome: string;
-  switchTo: string;
-  routePath: string;
-  language: string;
-  docsContent: string;
-  docsListTitle: string;
-  homeTitle: string;
-  homeText: string;
-  homeCta: string;
-  aboutTitle: string;
-  aboutText: string;
-  docsHomeTitle: string;
-  docsHomeText: string;
-  docsCategoryTitle: string;
-  docsOnThisPage: string;
-  docsPrevious: string;
-  docsNext: string;
-  docsLastUpdated: string;
-  notFound: string;
-  notFoundText: string;
-  errorTitle: string;
-  errorText: string;
-}
+export type DocCategoryId = 'fundamentals' | 'guides' | 'reference';
 
 export interface DocCategory {
   id: DocCategoryId;
@@ -59,68 +30,6 @@ export interface DocPage {
   order: number;
   sections: DocSection[];
 }
-
-const uiByLanguage: Record<Language, UiDictionary> = {
-  en: {
-    siteLabel: 'BetterHelper Docs',
-    docsLabel: 'Docs',
-    getStartedLabel: 'Get Started',
-    navOverview: 'Overview',
-    navAbout: 'About',
-    navDocsHome: 'Docs Home',
-    switchTo: 'Switch to',
-    routePath: 'Route',
-    language: 'Language',
-    docsContent: 'Documentation',
-    docsListTitle: 'Pages',
-    homeTitle: 'Documentation',
-    homeText: 'Comprehensive reference for BetterHelper Framework: routing, SSR, islands, JSX runtime, and CLI.',
-    homeCta: 'Open documentation',
-    aboutTitle: 'About',
-    aboutText: 'This docs site is built on BetterHelper itself, without React.',
-    docsHomeTitle: 'Documentation Overview',
-    docsHomeText: 'Pick a section to start. Fundamentals are recommended for first-time users.',
-    docsCategoryTitle: 'Categories',
-    docsOnThisPage: 'On this page',
-    docsPrevious: 'Previous',
-    docsNext: 'Next',
-    docsLastUpdated: 'Updated',
-    notFound: '404',
-    notFoundText: 'Page not found.',
-    errorTitle: 'Error',
-    errorText: 'Unhandled route error.',
-  },
-  ru: {
-    siteLabel: 'Документация BetterHelper',
-    docsLabel: 'Документация',
-    getStartedLabel: 'Быстрый старт',
-    navOverview: 'Обзор',
-    navAbout: 'О проекте',
-    navDocsHome: 'Главная docs',
-    switchTo: 'Переключить на',
-    routePath: 'Маршрут',
-    language: 'Язык',
-    docsContent: 'Справка',
-    docsListTitle: 'Страницы',
-    homeTitle: 'Документация',
-    homeText: 'Полная документация BetterHelper Framework: роутинг, SSR, islands, JSX runtime и CLI.',
-    homeCta: 'Открыть документацию',
-    aboutTitle: 'О проекте',
-    aboutText: 'Этот docs-сайт работает на самом BetterHelper, без React.',
-    docsHomeTitle: 'Обзор документации',
-    docsHomeText: 'Выберите раздел. Для первого знакомства начните с Fundamentals.',
-    docsCategoryTitle: 'Категории',
-    docsOnThisPage: 'На этой странице',
-    docsPrevious: 'Назад',
-    docsNext: 'Далее',
-    docsLastUpdated: 'Обновлено',
-    notFound: '404',
-    notFoundText: 'Страница не найдена.',
-    errorTitle: 'Ошибка',
-    errorText: 'Необработанная ошибка маршрута.',
-  },
-};
-
 const categoriesByLanguage: Record<Language, DocCategory[]> = {
   en: [
     {
@@ -689,20 +598,6 @@ const docsByLanguage: Record<Language, DocPage[]> = {
   ],
 };
 
-export function resolveLanguage(value: string | undefined): Language | null {
-  if (value === 'en' || value === 'ru') return value;
-  return null;
-}
-
-export function detectSystemLanguage(value: string | undefined): Language {
-  const normalized = (value ?? '').toLowerCase();
-  if (normalized.startsWith('ru')) return 'ru';
-  return 'en';
-}
-
-export function getUiDictionary(language: Language): UiDictionary {
-  return uiByLanguage[language];
-}
 
 export function getDocCategories(language: Language): DocCategory[] {
   return categoriesByLanguage[language];

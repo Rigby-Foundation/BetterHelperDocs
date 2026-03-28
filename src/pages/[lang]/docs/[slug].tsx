@@ -3,9 +3,8 @@ import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
 import {
   getAdjacentDocs,
   getDocPage,
-  getUiDictionary,
-  resolveLanguage,
 } from '../../../content/docs.js';
+import { getDictionary, resolveLanguage } from '../../../content/i18n.js';
 
 export const meta = {
   title: 'Docs',
@@ -29,7 +28,7 @@ export function loader(ctx: CounterSiteRouteContext) {
     language,
     slug,
     page,
-    ui: getUiDictionary(language),
+    ui: getDictionary(language),
     previous: adjacent.previous,
     next: adjacent.next,
     updatedAt: '2026-02-23',

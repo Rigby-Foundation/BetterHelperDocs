@@ -1,6 +1,6 @@
 import { notFound } from 'better-helperjs/router';
 import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
-import { getUiDictionary, resolveLanguage } from '../../content/docs.js';
+import { getDictionary, resolveLanguage } from '../../content/i18n.js';
 
 export const meta = {
   title: 'About',
@@ -14,7 +14,7 @@ export function loader(ctx: CounterSiteRouteContext) {
 
   return {
     language,
-    ui: getUiDictionary(language),
+    ui: getDictionary(language),
   };
 }
 

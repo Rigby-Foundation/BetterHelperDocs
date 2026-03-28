@@ -1,11 +1,12 @@
 import { Link } from 'better-helperjs/router';
 import type { FileLayoutProps } from 'better-helperjs/router/file-based';
 import type { CounterSiteState } from 'better-helperjs/ssr';
-import { getDocsByCategory, getUiDictionary, resolveLanguage } from '../../../content/docs.js';
+import { getDocsByCategory } from '../../../content/docs.js';
+import { getDictionary, resolveLanguage } from '../../../content/i18n.js';
 
 export default function DocsLayout({ children, ctx }: FileLayoutProps<CounterSiteState>) {
   const language = resolveLanguage(ctx.params.lang) ?? 'en';
-  const ui = getUiDictionary(language);
+  const ui = getDictionary(language);
   const groups = getDocsByCategory(language);
   const currentPath = ctx.pathname;
 

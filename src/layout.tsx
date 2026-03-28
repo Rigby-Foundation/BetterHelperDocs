@@ -1,6 +1,6 @@
 import { Link } from 'better-helperjs/router';
 import type { CounterSiteLayoutProps } from 'better-helperjs/ssr';
-import { getUiDictionary, resolveLanguage, type Language } from './content/docs.js';
+import { getDictionary, resolveLanguage, type Language } from './content/i18n.js';
 
 function languageFromUrl(url: string): Language {
   const parts = url.split('/').filter(Boolean);
@@ -27,21 +27,29 @@ function switchLanguagePath(currentUrl: string, target: Language): string {
 
 export default function Layout({ state, children, title, status }: CounterSiteLayoutProps) {
   const language = languageFromUrl(state.url);
-  const ui = getUiDictionary(language);
+  const ui = getDictionary(language);
   const otherLanguage: Language = language === 'en' ? 'ru' : 'en';
   const otherLanguagePath = switchLanguagePath(state.url, otherLanguage);
 
+  const isLandingPage = title === 'Overview' || title === 'Language';
+
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
-      <header className="border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] relative overflow-x-hidden">
+      {/* Universal Background Glow */}
+      <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-[hsl(var(--primary-glow))] bg-glow rounded-full"></div>
+
+      <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] glass-panel">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4 relative z-10">
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-8 items-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-3 text-xs font-medium text-[hsl(var(--muted-foreground))]">
+            <span className="inline-flex h-8 items-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-3 text-sm font-semibold text-[hsl(var(--foreground))] shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="mr-2 text-[hsl(var(--primary))]"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
               {ui.siteLabel}
             </span>
-            <span className="rounded-md border border-[hsl(var(--border))] px-2 py-1 text-xs text-[hsl(var(--muted-foreground))]">
-              HTTP {status}
-            </span>
+            {status !== 200 && (
+              <span className="rounded-md border border-[hsl(var(--border))] px-2 py-1 text-xs text-[hsl(var(--muted-foreground))] bg-[hsl(var(--card))]">
+                HTTP {status}
+              </span>
+            )}
           </div>
 
           <nav className="flex items-center gap-2">
@@ -51,20 +59,33 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
             <Link href={`/${language}/about`} className="nav-link">{ui.navAbout}</Link>
           </nav>
 
-          <Link href={otherLanguagePath} className="btn-outline">
+          <Link href={otherLanguagePath} className="btn-outline text-xs">
             {ui.switchTo} {otherLanguage.toUpperCase()}
           </Link>
         </div>
       </header>
 
-      <main className="grid w-full max-w-screen gap-6 px-6 py-8">
-        <section className="card p-6">
-          <div className="mb-6 border-b border-[hsl(var(--border))] pb-4">
-            <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <main className="relative z-10">
+        {isLandingPage ? (
+          children
+        ) : (
+          <div className="mx-auto grid w-full max-w-5xl gap-6 px-6 py-10">
+            <section className="card p-8 bg-[hsl(var(--background))]">
+              <div className="mb-8 border-b border-[hsl(var(--border))] pb-5">
+                <h1 className="text-3xl font-bold tracking-tight text-[hsl(var(--foreground))]">{title}</h1>
+              </div>
+              <div className="space-y-6 text-[hsl(var(--muted-foreground))] leading-relaxed">
+                {children}
+              </div>
+            </section>
           </div>
-          <div className="space-y-6">{children}</div>
-        </section>
+        )}
       </main>
+      
+      {/* Simple Footer */}
+      <footer className="border-t border-[hsl(var(--border))] py-8 mt-12 relative z-10 text-center text-sm text-[hsl(var(--muted-foreground))] glass-panel">
+        <p>&copy; {new Date().getFullYear()} Rigby Foundation. Built with BetterHelper.</p>
+      </footer>
     </div>
   );
 }

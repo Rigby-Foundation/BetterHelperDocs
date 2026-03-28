@@ -1,5 +1,5 @@
 import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
-import { getUiDictionary, resolveLanguage } from '../content/docs.js';
+import { getDictionary, resolveLanguage } from '../content/i18n.js';
 
 export const meta = {
   title: '404',
@@ -7,7 +7,7 @@ export const meta = {
 
 export default function NotFoundPage(ctx: CounterSiteRouteContext) {
   const language = resolveLanguage(ctx.pathname.split('/').filter(Boolean)[0]) ?? 'en';
-  const ui = getUiDictionary(language);
+  const ui = getDictionary(language);
 
   return (
     <section className="space-y-3">

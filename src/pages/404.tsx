@@ -1,11 +1,11 @@
-import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
+import type { SiteRouteContext } from '@rigbyhost/karui/ssr';
 import { getDictionary, resolveLanguage } from '../content/i18n.js';
 
 export const meta = {
   title: '404',
 };
 
-export default function NotFoundPage(ctx: CounterSiteRouteContext) {
+export default function NotFoundPage(ctx: SiteRouteContext) {
   const language = resolveLanguage(ctx.pathname.split('/').filter(Boolean)[0]) ?? 'en';
   const ui = getDictionary(language);
 

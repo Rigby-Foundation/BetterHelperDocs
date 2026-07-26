@@ -1,35 +1,16 @@
 import type { Language } from './i18n.js';
+import { enDocs } from './docs.en.js';
+import { ruDocs } from './docs.ru.js';
+import type { DocCategory, DocPage } from './docs-types.js';
 
-export type DocCategoryId = 'fundamentals' | 'guides' | 'reference';
+export type {
+  DocCategory,
+  DocCategoryId,
+  DocCodeBlock,
+  DocPage,
+  DocSection,
+} from './docs-types.js';
 
-export interface DocCategory {
-  id: DocCategoryId;
-  title: string;
-  description: string;
-}
-
-export interface DocCodeBlock {
-  language: string;
-  code: string;
-  filename?: string;
-}
-
-export interface DocSection {
-  id: string;
-  heading: string;
-  paragraphs: string[];
-  bullets?: string[];
-  code?: DocCodeBlock;
-}
-
-export interface DocPage {
-  slug: string;
-  title: string;
-  summary: string;
-  category: DocCategoryId;
-  order: number;
-  sections: DocSection[];
-}
 const categoriesByLanguage: Record<Language, DocCategory[]> = {
   en: [
     {
@@ -45,7 +26,7 @@ const categoriesByLanguage: Record<Language, DocCategory[]> = {
     {
       id: 'reference',
       title: 'Reference',
-      description: 'API details and command reference.',
+      description: 'API details, commands, and migration notes.',
     },
   ],
   ru: [
@@ -62,542 +43,15 @@ const categoriesByLanguage: Record<Language, DocCategory[]> = {
     {
       id: 'reference',
       title: 'Reference',
-      description: 'Справочник API и команд.',
+      description: 'Справочник API, команд и заметки по миграции.',
     },
   ],
 };
 
 const docsByLanguage: Record<Language, DocPage[]> = {
-  en: [
-    {
-      slug: 'introduction',
-      title: 'Introduction',
-      summary: 'What BetterHelper is, where it fits, and what problems it solves.',
-      category: 'fundamentals',
-      order: 10,
-      sections: [
-        {
-          id: 'what-is',
-          heading: 'What is BetterHelper',
-          paragraphs: [
-            'BetterHelper is a full-stack TypeScript framework with its own JSX runtime, file-based router, and SSR primitives.',
-            'It is designed to run in Node/Bun/Deno environments and can be integrated with Vite for browser development.',
-          ],
-        },
-        {
-          id: 'key-features',
-          heading: 'Key capabilities',
-          paragraphs: [
-            'BetterHelper includes server rendering, client hydration modes, typed route loaders, and an internal state model for page rendering.',
-          ],
-          bullets: [
-            'JSX runtime without React/Preact',
-            'File-based routing with nested layouts',
-            '404 and error entities as first-class routes',
-            'Hydration modes: full, islands, none',
-            'Framework CLI for project scaffolding',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'installation',
-      title: 'Installation',
-      summary: 'Bootstrap a new project and run it locally.',
-      category: 'fundamentals',
-      order: 20,
-      sections: [
-        {
-          id: 'create-project',
-          heading: 'Create project',
-          paragraphs: [
-            'The fastest way is to scaffold using the CLI.',
-          ],
-          code: {
-            language: 'bash',
-            code: 'npx better-helperjs create my-app\ncd my-app\nnpm install\nnpm run dev',
-          },
-        },
-        {
-          id: 'requirements',
-          heading: 'Requirements',
-          paragraphs: [
-            'Use a modern runtime (Node 20+, Bun, or Deno where applicable).',
-            'For docs and web projects with Vite, ensure TypeScript is enabled and jsxImportSource is configured to better-helperjs.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'project-structure',
-      title: 'Project Structure',
-      summary: 'Understand where app bootstrap, routes, and layouts live.',
-      category: 'fundamentals',
-      order: 30,
-      sections: [
-        {
-          id: 'layout',
-          heading: 'Typical structure',
-          paragraphs: [
-            'A BetterHelper SSR app keeps a thin bootstrap file and most application concerns in file-based pages.',
-          ],
-          code: {
-            language: 'text',
-            code: 'src/\n  app.tsx\n  layout.tsx\n  pages/\n    404.tsx\n    error.tsx\n    [lang]/index.tsx\n    [lang]/docs/[slug].tsx',
-          },
-        },
-        {
-          id: 'responsibilities',
-          heading: 'Responsibilities',
-          paragraphs: [
-            'app.tsx configures the site runtime and routing.',
-            'layout.tsx defines global shell and nav.',
-            'pages/** define route components, loaders, and entities.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'routing',
-      title: 'Routing',
-      summary: 'Work with static, dynamic, and catch-all routes.',
-      category: 'guides',
-      order: 110,
-      sections: [
-        {
-          id: 'patterns',
-          heading: 'Route patterns',
-          paragraphs: [
-            'Use static files for static routes and bracket syntax for params.',
-          ],
-          bullets: [
-            'index.tsx -> /',
-            '[slug].tsx -> /:slug',
-            '[...all].tsx -> /*',
-            'layout.tsx -> nested layout boundary',
-          ],
-        },
-        {
-          id: 'navigation',
-          heading: 'Navigation',
-          paragraphs: [
-            'Use Link from better-helperjs/router to keep client transitions and preserve app state.',
-          ],
-          code: {
-            language: 'tsx',
-            code: "import { Link } from 'better-helperjs/router';\n\n<Link href=\"/en/docs/routing\">Routing docs</Link>",
-          },
-        },
-      ],
-    },
-    {
-      slug: 'data-loading',
-      title: 'Data Loading',
-      summary: 'Load route data on server and client with typed loaders.',
-      category: 'guides',
-      order: 120,
-      sections: [
-        {
-          id: 'loader',
-          heading: 'Route loader',
-          paragraphs: [
-            'Export loader(ctx) from a page module. Loader output is available as ctx.data in the page component.',
-          ],
-          code: {
-            language: 'tsx',
-            filename: 'src/pages/[lang]/docs/[slug].tsx',
-            code: 'export function loader(ctx) {\n  return {\n    slug: ctx.params.slug,\n    tab: ctx.searchParams.get("tab") ?? "overview",\n  };\n}',
-          },
-        },
-        {
-          id: 'not-found',
-          heading: 'Not found flow',
-          paragraphs: [
-            'Throw notFound() in loader/component to route execution into your not-found entity.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'jsx-runtime',
-      title: 'JSX Runtime',
-      summary: 'Use framework-native JSX and hooks without React dependency.',
-      category: 'guides',
-      order: 130,
-      sections: [
-        {
-          id: 'config',
-          heading: 'Configuration',
-          paragraphs: [
-            'Set jsxImportSource to better-helperjs in tsconfig and Vite esbuild config.',
-          ],
-          code: {
-            language: 'json',
-            filename: 'tsconfig.json',
-            code: '{\n  "compilerOptions": {\n    "jsx": "react-jsx",\n    "jsxImportSource": "better-helperjs"\n  }\n}',
-          },
-        },
-        {
-          id: 'hooks',
-          heading: 'Supported hooks',
-          paragraphs: [
-            'The runtime provides useState, useEffect, useMemo, useReducer, useCallback, useRef, createContext, and useContext.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'ssr-hydration',
-      title: 'SSR and Hydration',
-      summary: 'Choose rendering mode based on your UX and performance goals.',
-      category: 'guides',
-      order: 140,
-      sections: [
-        {
-          id: 'modes',
-          heading: 'Hydration modes',
-          paragraphs: [
-            'Use full for interactive apps, islands for partial hydration, none for content-first static-like pages.',
-          ],
-          code: {
-            language: 'tsx',
-            filename: 'src/app.tsx',
-            code: "defineCounterSite({\n  pages,\n  layout,\n  hydrateMode: 'islands',\n});",
-          },
-        },
-        {
-          id: 'streaming',
-          heading: 'Streaming',
-          paragraphs: [
-            'Server helpers can stream HTML chunks to improve time-to-first-byte and progressively flush response.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'error-handling',
-      title: 'Error Handling',
-      summary: 'Handle route errors with dedicated entities and boundaries.',
-      category: 'guides',
-      order: 150,
-      sections: [
-        {
-          id: 'entities',
-          heading: 'Error entities',
-          paragraphs: [
-            'Create pages/error.tsx for global route errors and pages/404.tsx for not-found.',
-            'You can also define route-level errorBoundary in page modules.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'cli',
-      title: 'CLI Reference',
-      summary: 'Scaffold and maintain BetterHelper projects from terminal.',
-      category: 'reference',
-      order: 210,
-      sections: [
-        {
-          id: 'commands',
-          heading: 'Commands',
-          paragraphs: [],
-          code: {
-            language: 'bash',
-            code: 'better-helperjs create <project-name> [--pm npm|pnpm|yarn|bun] [--no-install] [--force]',
-          },
-        },
-      ],
-    },
-    {
-      slug: 'api',
-      title: 'API Reference',
-      summary: 'High-level map of important framework modules.',
-      category: 'reference',
-      order: 220,
-      sections: [
-        {
-          id: 'modules',
-          heading: 'Core modules',
-          paragraphs: [],
-          bullets: [
-            'better-helperjs/router',
-            'better-helperjs/router/file-based',
-            'better-helperjs/jsx',
-            'better-helperjs/ssr',
-            'better-helperjs/ssr/site-server',
-            'better-helperjs/core',
-          ],
-        },
-      ],
-    },
-  ],
-  ru: [
-    {
-      slug: 'introduction',
-      title: 'Введение',
-      summary: 'Что такое BetterHelper, где он применяется и какие задачи решает.',
-      category: 'fundamentals',
-      order: 10,
-      sections: [
-        {
-          id: 'what-is',
-          heading: 'Что такое BetterHelper',
-          paragraphs: [
-            'BetterHelper — full-stack TypeScript фреймворк со своим JSX runtime, file-based router и SSR-примитивами.',
-            'Он рассчитан на Node/Bun/Deno и интеграцию с Vite для браузерной разработки.',
-          ],
-        },
-        {
-          id: 'key-features',
-          heading: 'Ключевые возможности',
-          paragraphs: [
-            'В составе фреймворка есть серверный рендер, режимы гидрации, typed loaders и внутренняя state-модель для рендера страниц.',
-          ],
-          bullets: [
-            'JSX runtime без React/Preact',
-            'File-based роутинг с nested layouts',
-            'Сущности 404 и error как first-class routes',
-            'Режимы гидрации: full, islands, none',
-            'CLI для быстрого старта проектов',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'installation',
-      title: 'Установка',
-      summary: 'Создание нового проекта и запуск локально.',
-      category: 'fundamentals',
-      order: 20,
-      sections: [
-        {
-          id: 'create-project',
-          heading: 'Создание проекта',
-          paragraphs: [
-            'Быстрее всего стартовать через CLI.',
-          ],
-          code: {
-            language: 'bash',
-            code: 'npx better-helperjs create my-app\ncd my-app\nnpm install\nnpm run dev',
-          },
-        },
-        {
-          id: 'requirements',
-          heading: 'Требования',
-          paragraphs: [
-            'Используйте современный runtime (Node 20+, Bun или Deno в зависимости от окружения).',
-            'Для docs/web-проектов на Vite задайте jsxImportSource = better-helperjs.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'project-structure',
-      title: 'Структура проекта',
-      summary: 'Где хранятся bootstrap, роуты и layout.',
-      category: 'fundamentals',
-      order: 30,
-      sections: [
-        {
-          id: 'layout',
-          heading: 'Типовая структура',
-          paragraphs: [
-            'SSR-приложение BetterHelper обычно имеет тонкий bootstrap и основной код в file-based pages.',
-          ],
-          code: {
-            language: 'text',
-            code: 'src/\n  app.tsx\n  layout.tsx\n  pages/\n    404.tsx\n    error.tsx\n    [lang]/index.tsx\n    [lang]/docs/[slug].tsx',
-          },
-        },
-        {
-          id: 'responsibilities',
-          heading: 'Ответственность файлов',
-          paragraphs: [
-            'app.tsx настраивает runtime и роутинг.',
-            'layout.tsx задает общий shell и навигацию.',
-            'pages/** содержит страницы, loader и route-сущности.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'routing',
-      title: 'Роутинг',
-      summary: 'Статические, динамические и catch-all маршруты.',
-      category: 'guides',
-      order: 110,
-      sections: [
-        {
-          id: 'patterns',
-          heading: 'Паттерны маршрутов',
-          paragraphs: [
-            'Статический файл задает статический путь, синтаксис в скобках добавляет параметры.',
-          ],
-          bullets: [
-            'index.tsx -> /',
-            '[slug].tsx -> /:slug',
-            '[...all].tsx -> /*',
-            'layout.tsx -> nested layout boundary',
-          ],
-        },
-        {
-          id: 'navigation',
-          heading: 'Навигация',
-          paragraphs: [
-            'Используйте Link из better-helperjs/router для клиентских переходов и сохранения state.',
-          ],
-          code: {
-            language: 'tsx',
-            code: "import { Link } from 'better-helperjs/router';\n\n<Link href=\"/ru/docs/routing\">Роутинг</Link>",
-          },
-        },
-      ],
-    },
-    {
-      slug: 'data-loading',
-      title: 'Загрузка данных',
-      summary: 'Server/client data loading через typed loader.',
-      category: 'guides',
-      order: 120,
-      sections: [
-        {
-          id: 'loader',
-          heading: 'Route loader',
-          paragraphs: [
-            'Экспортируйте loader(ctx) в модуле страницы. Его результат приходит в компонент как ctx.data.',
-          ],
-          code: {
-            language: 'tsx',
-            filename: 'src/pages/[lang]/docs/[slug].tsx',
-            code: 'export function loader(ctx) {\n  return {\n    slug: ctx.params.slug,\n    tab: ctx.searchParams.get("tab") ?? "overview",\n  };\n}',
-          },
-        },
-        {
-          id: 'not-found',
-          heading: 'Поток not found',
-          paragraphs: [
-            'Бросайте notFound() в loader/component, чтобы перейти в not-found сущность.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'jsx-runtime',
-      title: 'JSX Runtime',
-      summary: 'Нативный JSX и хуки фреймворка без зависимости на React.',
-      category: 'guides',
-      order: 130,
-      sections: [
-        {
-          id: 'config',
-          heading: 'Конфиг',
-          paragraphs: [
-            'В tsconfig и Vite задайте jsxImportSource = better-helperjs.',
-          ],
-          code: {
-            language: 'json',
-            filename: 'tsconfig.json',
-            code: '{\n  "compilerOptions": {\n    "jsx": "react-jsx",\n    "jsxImportSource": "better-helperjs"\n  }\n}',
-          },
-        },
-        {
-          id: 'hooks',
-          heading: 'Поддерживаемые хуки',
-          paragraphs: [
-            'Доступны useState, useEffect, useMemo, useReducer, useCallback, useRef, createContext и useContext.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'ssr-hydration',
-      title: 'SSR и гидрация',
-      summary: 'Выбор режима рендера под UX и производительность.',
-      category: 'guides',
-      order: 140,
-      sections: [
-        {
-          id: 'modes',
-          heading: 'Режимы гидрации',
-          paragraphs: [
-            'full — для интерактивных приложений, islands — для частичной гидрации, none — для контентных страниц без клиентской гидрации.',
-          ],
-          code: {
-            language: 'tsx',
-            filename: 'src/app.tsx',
-            code: "defineCounterSite({\n  pages,\n  layout,\n  hydrateMode: 'islands',\n});",
-          },
-        },
-        {
-          id: 'streaming',
-          heading: 'Стриминг',
-          paragraphs: [
-            'SSR stream helpers позволяют отправлять HTML по частям и ускорять TTFB.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'error-handling',
-      title: 'Обработка ошибок',
-      summary: 'Route-ошибки через сущности и boundary.',
-      category: 'guides',
-      order: 150,
-      sections: [
-        {
-          id: 'entities',
-          heading: 'Error-сущности',
-          paragraphs: [
-            'Создайте pages/error.tsx для глобальных route-ошибок и pages/404.tsx для not-found.',
-            'Также можно задавать route-level errorBoundary в модуле страницы.',
-          ],
-        },
-      ],
-    },
-    {
-      slug: 'cli',
-      title: 'CLI Reference',
-      summary: 'Справка по CLI для старта и поддержки проектов.',
-      category: 'reference',
-      order: 210,
-      sections: [
-        {
-          id: 'commands',
-          heading: 'Команды',
-          paragraphs: [],
-          code: {
-            language: 'bash',
-            code: 'better-helperjs create <project-name> [--pm npm|pnpm|yarn|bun] [--no-install] [--force]',
-          },
-        },
-      ],
-    },
-    {
-      slug: 'api',
-      title: 'API Reference',
-      summary: 'Карта ключевых модулей фреймворка.',
-      category: 'reference',
-      order: 220,
-      sections: [
-        {
-          id: 'modules',
-          heading: 'Основные модули',
-          paragraphs: [],
-          bullets: [
-            'better-helperjs/router',
-            'better-helperjs/router/file-based',
-            'better-helperjs/jsx',
-            'better-helperjs/ssr',
-            'better-helperjs/ssr/site-server',
-            'better-helperjs/core',
-          ],
-        },
-      ],
-    },
-  ],
+  en: enDocs,
+  ru: ruDocs,
 };
-
 
 export function getDocCategories(language: Language): DocCategory[] {
   return categoriesByLanguage[language];
@@ -627,6 +81,19 @@ export function getDefaultDocSlug(language: Language): string {
   return getDocsCatalog(language)[0]?.slug ?? 'introduction';
 }
 
+/** Every language/slug pair, for prerendering and sitemaps. */
+export function getAllDocPaths(): Array<{ lang: Language; slug: string }> {
+  const paths: Array<{ lang: Language; slug: string }> = [];
+
+  for (const language of Object.keys(docsByLanguage) as Language[]) {
+    for (const page of docsByLanguage[language]) {
+      paths.push({ lang: language, slug: page.slug });
+    }
+  }
+
+  return paths;
+}
+
 export function getAdjacentDocs(
   language: Language,
   slug: string
@@ -645,4 +112,3 @@ export function getAdjacentDocs(
     next: pages[index + 1] ?? null,
   };
 }
-

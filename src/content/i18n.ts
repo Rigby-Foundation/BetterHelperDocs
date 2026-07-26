@@ -2,6 +2,13 @@ import en from '../locales/en.json' with { type: 'json' };
 import ru from '../locales/ru.json' with { type: 'json' };
 
 export type Language = 'en' | 'ru';
+
+export const LANGUAGES: Language[] = ['en', 'ru'];
+
+/** Parameter sets for prerendering every `[lang]` route. */
+export function languageParams(): Array<{ lang: Language }> {
+  return LANGUAGES.map((lang) => ({ lang }));
+}
 export type Dictionary = typeof en;
 
 const dictionaries: Record<Language, Dictionary> = {

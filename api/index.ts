@@ -1,3 +1,3 @@
-import { createConventionSiteHandler } from 'better-helperjs/ssr/site-server';
+import { createConventionSiteHandler } from '@rigbyhost/karui/ssr/site-server';
 
 export default await createConventionSiteHandler();

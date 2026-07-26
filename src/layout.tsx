@@ -1,5 +1,5 @@
-import { Link } from 'better-helperjs/router';
-import type { CounterSiteLayoutProps } from 'better-helperjs/ssr';
+import { Link } from '@rigbyhost/karui/router';
+import type { SiteLayoutProps } from '@rigbyhost/karui/ssr';
 import { getDictionary, resolveLanguage, type Language } from './content/i18n.js';
 
 function languageFromUrl(url: string): Language {
@@ -25,7 +25,7 @@ function switchLanguagePath(currentUrl: string, target: Language): string {
   return `/${parts.join('/')}${queryPart ? `?${queryPart}` : ''}`;
 }
 
-export default function Layout({ state, children, title, status }: CounterSiteLayoutProps) {
+export default function Layout({ state, children, title, status }: SiteLayoutProps) {
   const language = languageFromUrl(state.url);
   const ui = getDictionary(language);
 
@@ -44,7 +44,7 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
           <div className="flex items-center gap-3">
             <Link href={`/${language}`} className="inline-flex h-8 items-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-3 text-sm font-semibold text-[hsl(var(--foreground))] shadow-sm hover:bg-[hsl(var(--border))] transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-[hsl(var(--primary))]"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-              BetterHelper
+              Karui
             </Link>
             {status !== 200 && (
               <span className="rounded-md border border-[hsl(var(--border))] px-2 py-1 text-xs text-[hsl(var(--muted-foreground))] bg-[hsl(var(--card))]">
@@ -120,7 +120,7 @@ export default function Layout({ state, children, title, status }: CounterSiteLa
       
       {/* Simple Footer */}
       <footer className="border-t border-[hsl(var(--border))] py-8 mt-12 relative z-10 text-center text-sm text-[hsl(var(--muted-foreground))] glass-panel">
-        <p>&copy; {new Date().getFullYear()} Rigby Foundation. Built with BetterHelper.</p>
+        <p>&copy; {new Date().getFullYear()} Rigby Foundation. Built with Karui.</p>
       </footer>
     </div>
   );

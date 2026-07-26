@@ -1,13 +1,27 @@
-import { Link, notFound } from 'better-helperjs/router';
-import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
+import { Link, notFound } from '@rigbyhost/karui/router';
+import type { SiteRouteContext } from '@rigbyhost/karui/ssr';
 import { getDefaultDocSlug, getDocsByCategory } from '../../content/docs.js';
-import { getDictionary, resolveLanguage } from '../../content/i18n.js';
+import { getDictionary, languageParams, resolveLanguage } from '../../content/i18n.js';
+import { GITHUB_URL, KARUI_VERSION, SITE_ORIGIN } from '../../content/site.js';
 
-export const meta = {
-  title: 'Overview',
+// Language comes from the route, so metadata resolves per language.
+export const meta = (ctx: SiteRouteContext) => {
+  const language = resolveLanguage(ctx.params.lang) ?? 'en';
+  const ui = getDictionary(language);
+
+  return {
+    title: ui.homeTitle,
+    description: ui.homeText,
+    lang: language,
+    canonical: `${SITE_ORIGIN}/${language}`,
+  };
 };
 
-export function loader(ctx: CounterSiteRouteContext) {
+export function staticPaths() {
+  return languageParams();
+}
+
+export function loader(ctx: SiteRouteContext) {
   const language = resolveLanguage(ctx.params.lang);
   if (!language) {
     notFound();
@@ -21,7 +35,7 @@ export function loader(ctx: CounterSiteRouteContext) {
   };
 }
 
-export default function LanguageOverviewPage(ctx: CounterSiteRouteContext) {
+export default function LanguageOverviewPage(ctx: SiteRouteContext) {
   const data = ctx.data as ReturnType<typeof loader>;
 
   return (
@@ -30,7 +44,7 @@ export default function LanguageOverviewPage(ctx: CounterSiteRouteContext) {
       <section className="relative px-6 pt-24 pb-20 lg:pt-40 lg:pb-32 flex flex-col items-center justify-center text-center overflow-hidden">
         <div className="inline-flex items-center rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-3 py-1 text-sm text-[hsl(var(--primary))] mb-8 backdrop-blur-md">
           <span className="flex h-2 w-2 rounded-full bg-[hsl(var(--primary))] mr-2 animate-pulse"></span>
-          BetterHelper v3.0.4 is out!
+          Karui v{KARUI_VERSION} is out!
         </div>
         
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-[hsl(var(--muted-foreground))] drop-shadow-sm mb-8 max-w-5xl leading-tight">
@@ -46,7 +60,7 @@ export default function LanguageOverviewPage(ctx: CounterSiteRouteContext) {
             {data.ui.heroPrimaryCta}
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </Link>
-          <a href="https://github.com/Rigby-Foundation/BetterHelperjs" target="_blank" className="btn-outline px-8 py-4 text-lg w-full sm:w-auto">
+          <a href={GITHUB_URL} target="_blank" className="btn-outline px-8 py-4 text-lg w-full sm:w-auto">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
             {data.ui.heroSecondaryCta}
           </a>

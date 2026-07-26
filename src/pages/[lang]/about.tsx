@@ -1,12 +1,26 @@
-import { notFound } from 'better-helperjs/router';
-import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
-import { getDictionary, resolveLanguage } from '../../content/i18n.js';
+import { notFound } from '@rigbyhost/karui/router';
+import type { SiteRouteContext } from '@rigbyhost/karui/ssr';
+import { getDictionary, languageParams, resolveLanguage } from '../../content/i18n.js';
+import { SITE_ORIGIN } from '../../content/site.js';
 
-export const meta = {
-  title: 'About',
+// Language comes from the route, so metadata resolves per language.
+export const meta = (ctx: SiteRouteContext) => {
+  const language = resolveLanguage(ctx.params.lang) ?? 'en';
+  const ui = getDictionary(language);
+
+  return {
+    title: ui.aboutTitle,
+    description: ui.aboutText,
+    lang: language,
+    canonical: `${SITE_ORIGIN}/${language}/about`,
+  };
 };
 
-export function loader(ctx: CounterSiteRouteContext) {
+export function staticPaths() {
+  return languageParams();
+}
+
+export function loader(ctx: SiteRouteContext) {
   const language = resolveLanguage(ctx.params.lang);
   if (!language) {
     notFound();
@@ -18,7 +32,7 @@ export function loader(ctx: CounterSiteRouteContext) {
   };
 }
 
-export default function AboutPage(ctx: CounterSiteRouteContext) {
+export default function AboutPage(ctx: SiteRouteContext) {
   const data = ctx.data as ReturnType<typeof loader>;
   const points = data.language === 'ru'
     ? [

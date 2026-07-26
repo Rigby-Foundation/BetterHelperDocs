@@ -1,10 +1,10 @@
-import { Link } from 'better-helperjs/router';
-import type { FileLayoutProps } from 'better-helperjs/router/file-based';
-import type { CounterSiteState } from 'better-helperjs/ssr';
+import { Link } from '@rigbyhost/karui/router';
+import type { FileLayoutProps } from '@rigbyhost/karui/router/file-based';
+import type { RenderState } from '@rigbyhost/karui/ssr';
 import { getDocsByCategory } from '../../../content/docs.js';
 import { getDictionary, resolveLanguage } from '../../../content/i18n.js';
 
-export default function DocsLayout({ children, ctx }: FileLayoutProps<CounterSiteState>) {
+export default function DocsLayout({ children, ctx }: FileLayoutProps<RenderState>) {
   const language = resolveLanguage(ctx.params.lang) ?? 'en';
   const ui = getDictionary(language);
   const groups = getDocsByCategory(language);

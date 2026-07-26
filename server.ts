@@ -1,4 +1,4 @@
-import { createConventionSiteServer } from 'better-helperjs/ssr/site-server';
+import { createConventionSiteServer } from '@rigbyhost/karui/ssr/site-server';
 
 createConventionSiteServer({
   port: Number(process.env.PORT ?? 4173),

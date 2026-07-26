@@ -1,16 +1,38 @@
-import { Link, notFound } from 'better-helperjs/router';
-import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
+import { Link, notFound } from '@rigbyhost/karui/router';
+import type { SiteRouteContext } from '@rigbyhost/karui/ssr';
 import {
   getAdjacentDocs,
+  getAllDocPaths,
   getDocPage,
 } from '../../../content/docs.js';
 import { getDictionary, resolveLanguage } from '../../../content/i18n.js';
+import { SITE_ORIGIN } from '../../../content/site.js';
 
-export const meta = {
-  title: 'Docs',
+// Metadata built from loader data, so every page gets its own title,
+// description and canonical rather than a shared placeholder.
+export const meta = (ctx: SiteRouteContext) => {
+  const data = ctx.data as ReturnType<typeof loader> | undefined;
+  if (!data) return { title: 'Docs' };
+
+  return {
+    title: data.page.title,
+    description: data.page.summary,
+    lang: data.language,
+    canonical: `${SITE_ORIGIN}/${data.language}/docs/${data.page.slug}`,
+    og: { type: 'article' },
+    link: [
+      { rel: 'alternate', hreflang: 'en', href: `/en/docs/${data.page.slug}` },
+      { rel: 'alternate', hreflang: 'ru', href: `/ru/docs/${data.page.slug}` },
+    ],
+  };
 };
 
-export function loader(ctx: CounterSiteRouteContext) {
+// Every language/slug pair is prerendered by `karui prerender`.
+export function staticPaths() {
+  return getAllDocPaths();
+}
+
+export function loader(ctx: SiteRouteContext) {
   const language = resolveLanguage(ctx.params.lang);
   const slug = ctx.params.slug ?? '';
   if (!language) {
@@ -31,11 +53,11 @@ export function loader(ctx: CounterSiteRouteContext) {
     ui: getDictionary(language),
     previous: adjacent.previous,
     next: adjacent.next,
-    updatedAt: '2026-02-23',
+    updatedAt: '2026-07-26',
   };
 }
 
-export default function DocsPage(ctx: CounterSiteRouteContext) {
+export default function DocsPage(ctx: SiteRouteContext) {
   const data = ctx.data as ReturnType<typeof loader>;
 
   return (

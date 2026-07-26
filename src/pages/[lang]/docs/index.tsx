@@ -1,16 +1,30 @@
-import { Link, notFound } from 'better-helperjs/router';
-import type { CounterSiteRouteContext } from 'better-helperjs/ssr';
+import { Link, notFound } from '@rigbyhost/karui/router';
+import type { SiteRouteContext } from '@rigbyhost/karui/ssr';
 import {
   getDefaultDocSlug,
   getDocsByCategory,
 } from '../../../content/docs.js';
-import { getDictionary, resolveLanguage } from '../../../content/i18n.js';
+import { getDictionary, languageParams, resolveLanguage } from '../../../content/i18n.js';
+import { SITE_ORIGIN } from '../../../content/site.js';
 
-export const meta = {
-  title: 'Docs',
+// Language comes from the route, so metadata resolves per language.
+export const meta = (ctx: SiteRouteContext) => {
+  const language = resolveLanguage(ctx.params.lang) ?? 'en';
+  const ui = getDictionary(language);
+
+  return {
+    title: ui.docsHomeTitle,
+    description: ui.docsHomeText,
+    lang: language,
+    canonical: `${SITE_ORIGIN}/${language}/docs`,
+  };
 };
 
-export function loader(ctx: CounterSiteRouteContext) {
+export function staticPaths() {
+  return languageParams();
+}
+
+export function loader(ctx: SiteRouteContext) {
   const language = resolveLanguage(ctx.params.lang);
   if (!language) {
     notFound();
@@ -24,7 +38,7 @@ export function loader(ctx: CounterSiteRouteContext) {
   };
 }
 
-export default function DocsHomePage(ctx: CounterSiteRouteContext) {
+export default function DocsHomePage(ctx: SiteRouteContext) {
   const data = ctx.data as ReturnType<typeof loader>;
 
   return (

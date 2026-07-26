@@ -1,5 +1,5 @@
-import { Link } from 'better-helperjs/router';
-import { useEffect } from 'better-helperjs/jsx';
+import { Link } from '@rigbyhost/karui/router';
+import { useEffect } from '@rigbyhost/karui/jsx';
 import { detectSystemLanguage } from '../content/i18n.js';
 
 export const meta = {

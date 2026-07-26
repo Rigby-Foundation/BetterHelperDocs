@@ -1,11 +1,11 @@
-import type { CounterSiteErrorContext } from 'better-helperjs/ssr';
+import type { SiteErrorContext } from '@rigbyhost/karui/ssr';
 import { getDictionary, resolveLanguage } from '../content/i18n.js';
 
 export const meta = {
   title: 'Error',
 };
 
-export default function ErrorPage(ctx: CounterSiteErrorContext) {
+export default function ErrorPage(ctx: SiteErrorContext) {
   const language = resolveLanguage(ctx.pathname.split('/').filter(Boolean)[0]) ?? 'en';
   const ui = getDictionary(language);
   const message = ctx.error instanceof Error ? ctx.error.message : String(ctx.error);

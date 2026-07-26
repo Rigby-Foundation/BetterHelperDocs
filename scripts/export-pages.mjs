@@ -1,6 +1,9 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import { applyHtmlLang } from '@rigbyhost/karui/ssr';
+import { collectPrerenderPaths } from '@rigbyhost/karui/ssr/prerender';
+
 import { site } from '../dist/server/app.js';
 
 function normalizeBasePath(input) {
@@ -53,19 +56,6 @@ function rewriteAbsoluteUrls(html, basePath) {
   });
 }
 
-function collectDocSlugs(language, html) {
-  const regex = new RegExp(`href="/${language}/docs/([a-z0-9-]+)"`, 'g');
-  const slugs = new Set();
-
-  let match = regex.exec(html);
-  while (match) {
-    slugs.add(match[1]);
-    match = regex.exec(html);
-  }
-
-  return Array.from(slugs);
-}
-
 async function fileExists(filePath) {
   try {
     await readFile(filePath, 'utf8');
@@ -88,11 +78,9 @@ async function main() {
   const hasCname = await fileExists(cnamePath);
   const basePath = hasCname ? '/' : normalizeBasePath(process.env.PAGES_BASE_PATH);
 
-  const [template, manifestRaw, docsEn, docsRu] = await Promise.all([
+  const [template, manifestRaw] = await Promise.all([
     readFile(templatePath, 'utf8'),
     readFile(manifestPath, 'utf8'),
-    site.render('/en/docs'),
-    site.render('/ru/docs'),
   ]);
 
   const manifest = JSON.parse(manifestRaw);
@@ -105,13 +93,8 @@ async function main() {
     .map((cssFile) => `<link rel="stylesheet" href="/${cssFile}">`)
     .join('');
 
-  const routes = new Set(['/', '/404', '/en', '/ru', '/en/about', '/ru/about', '/en/docs', '/ru/docs']);
-  for (const slug of collectDocSlugs('en', docsEn.html)) {
-    routes.add(`/en/docs/${slug}`);
-  }
-  for (const slug of collectDocSlugs('ru', docsRu.html)) {
-    routes.add(`/ru/docs/${slug}`);
-  }
+  // Static routes plus every staticPaths() expansion the pages declare.
+  const routes = new Set(['/', '/404', ...(await collectPrerenderPaths(site.routes))]);
 
   await rm(distPages, { recursive: true, force: true });
   await mkdir(distPages, { recursive: true });
@@ -128,7 +111,8 @@ async function main() {
   for (const route of routes) {
     const rendered = await site.render(route);
 
-    let html = template
+    // meta.lang drives <html lang>, which matters on a bilingual site.
+    let html = applyHtmlLang(template, rendered.lang)
       .replace('<!--app-head-->', `${rendered.head}\n${styleTags}`)
       .replace('<!--app-html-->', rendered.html)
       .replace('<!--app-state-->', 'null')

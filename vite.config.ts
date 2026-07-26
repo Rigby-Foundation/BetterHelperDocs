@@ -1,18 +1,13 @@
-import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 
 // Read the framework version actually installed, so the hero badge cannot
-// drift the way the hardcoded one did.
-//
-// Read straight off disk: Karui is ESM-only and its exports map has no
-// ./package.json entry, so neither require.resolve nor a subpath import works.
-const karuiVersion = (
-  JSON.parse(
-    readFileSync(resolve(__dirname, 'node_modules/@rigbyhost/karui/package.json'), 'utf8')
-  ) as { version: string }
-).version;
+// drift the way the hardcoded one did. Needs karui >= 5.0.1, which is where
+// ./package.json was added to the exports map.
+const require = createRequire(import.meta.url);
+const karuiVersion = (require('@rigbyhost/karui/package.json') as { version: string }).version;
 
 export default defineConfig({
   plugins: [tailwindcss()],

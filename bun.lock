@@ -5,7 +5,7 @@
     "": {
       "name": "karui-docs",
       "dependencies": {
-        "@rigbyhost/karui": "^5.0.0",
+        "@rigbyhost/karui": "^5.0.1",
       },
       "devDependencies": {
         "@tailwindcss/vite": "^4.1.12",
@@ -80,7 +80,7 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@rigbyhost/karui": ["@rigbyhost/karui@5.0.0", "", { "peerDependencies": { "vite": "^7.3.1" }, "bin": { "karui": "dist/cli.js" } }, "sha512-ifl6f+xLGtDJrgusl7Zr1Rbt4NXNoJlxefS3UJlGSyUZyfqW1ND6/Or9FD5Xm4iumGSP5SVnDLwmy5r/DdIBTA=="],
+    "@rigbyhost/karui": ["@rigbyhost/karui@5.0.1", "", { "peerDependencies": { "vite": "^7.3.1" }, "optionalPeers": ["vite"], "bin": { "karui": "dist/cli.js" } }, "sha512-5FvFUTWwu///z/+rZe2Vpa4x8KCwiwglTMNRSsvsUxTiSL1be0n61HDCCcDlkm3D7N9x1JsDir7FDlUyEPaHTw=="],
 
     "@rollup/rollup-android-arm-eabi": ["@rollup/rollup-android-arm-eabi@4.62.2", "", { "os": "android", "cpu": "arm" }, "sha512-6o7ZLZK+BeenkZCFNDXqpbjw9bD6nuWonvS/lwQJp7NoVVxm6p3qE7qQ5jGuBjiFsgvqjD8mZAU5oWxTmbOeOg=="],
 

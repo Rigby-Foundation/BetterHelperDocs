@@ -14,7 +14,7 @@
     "prerender": "npm run build && karui prerender --not-found /404"
   },
   "dependencies": {
-    "@rigbyhost/karui": "^5.0.0"
+    "@rigbyhost/karui": "^5.0.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.12",
